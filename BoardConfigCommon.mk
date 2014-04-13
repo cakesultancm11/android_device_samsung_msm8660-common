@@ -93,10 +93,9 @@ TARGET_ENABLE_QC_AV_ENHANCEMENTS := true
 # To handle radio version checks
 TARGET_RELEASETOOLS_EXTENSIONS := device/samsung/msm8660-common
 
-# Use legacy MM heap behavior
+# Graphics
+NUM_FRAMEBUFFER_SURFACE_BUFFERS := 3
 TARGET_DISPLAY_INSECURE_MM_HEAP := true
-
-# Use retire fence from MDP driver
 TARGET_DISPLAY_USE_RETIRE_FENCE := true
 
 # Use CM PowerHAL
