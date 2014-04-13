@@ -42,7 +42,11 @@ PRODUCT_PACKAGES += \
 
 # Ramdisk
 PRODUCT_PACKAGES += \
-    fstab.qcom \
+    fstab.qcom
+
+# Camera wrapper
+PRODUCT_PACKAGES += \
+    camera.msm8660
 
 # HALs
 PRODUCT_PACKAGES += \
