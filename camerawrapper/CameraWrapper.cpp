@@ -106,6 +106,8 @@ static char *camera_fixup_getparams(int id, const char *settings)
     params.dump();
 #endif
 
+    params.set(android::CameraParameters::KEY_ROTATION, "0");
+
     if (id==0) {
 	params.set(android::CameraParameters::KEY_PREFERRED_PREVIEW_SIZE_FOR_VIDEO, "1280x720");
 	params.set(android::CameraParameters::KEY_SUPPORTED_FOCUS_MODES, "auto,macro,fixed,continuous-video,face-priority");
