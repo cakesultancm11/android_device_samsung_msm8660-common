@@ -60,7 +60,6 @@ BOARD_EGL_CFG := device/samsung/msm8660-common/configs/egl.cfg
 BOARD_HAVE_BLUETOOTH := true
 BOARD_HAVE_BLUETOOTH_BCM := true
 BOARD_BLUEDROID_VENDOR_CONF := device/samsung/msm8660-common/bluetooth/vnd_msm8660.txt
-BOARD_BLUETOOTH_USES_HCIATTACH_PROPERTY := false
 
 # GPS
 BOARD_HAVE_NEW_QC_GPS := true
