@@ -90,7 +90,8 @@ static int check_vendor_module()
     if (gVendorModule)
         return 0;
 
-    rv = hw_get_module("vendor-camera", (const hw_module_t **)&gVendorModule);
+    // blob should be named /system/lib/hw/camera.vendor.msm8660.so
+    rv = hw_get_module_by_class(CAMERA_HARDWARE_MODULE_ID, "vendor", (const hw_module_t**)&gVendorModule);
     if (rv)
         ALOGE("failed to open vendor camera module");
     return rv;
