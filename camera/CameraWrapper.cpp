@@ -136,13 +136,6 @@ char * camera_fixup_setparams(struct camera_device * device, const char * settin
     params.dump();
 #endif
 
-    params.set(android::CameraParameters::KEY_ROTATION, "0");
-
-    if (id==0) {
-	params.set(android::CameraParameters::KEY_PREFERRED_PREVIEW_SIZE_FOR_VIDEO, "1280x720");
-	params.set(android::CameraParameters::KEY_SUPPORTED_FOCUS_MODES, "auto,macro,fixed,continuous-video,face-priority");
-    }
-
 #if !LOG_NDEBUG
     ALOGV("%s: fixed parameters:", __FUNCTION__);
     params.dump();
