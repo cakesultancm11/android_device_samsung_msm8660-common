@@ -24,11 +24,13 @@ import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceFragment;
+import android.preference.PreferenceGroup;
 import android.preference.PreferenceManager;
 import android.preference.PreferenceScreen;
 import android.util.Log;
 
 import com.cyanogenmod.settings.device.R;
+import com.cyanogenmod.settings.device.VibratorIntensity;
 
 public class SensorsFragmentActivity extends PreferenceFragment {
 
@@ -39,6 +41,12 @@ public class SensorsFragmentActivity extends PreferenceFragment {
     private static final String FILE_TOUCHKEY_LIGHT = "/data/.disable_touchlight";
     private static final String FILE_TOUCHKEY_TOGGLE = "/sys/class/misc/sec_touchkey/brightness";
     private static final String FILE_BLN_TOGGLE = "/sys/class/misc/backlightnotification/enabled";
+    private static final String FILE_BLN_CONTROL = "/sys/class/misc/backlightnotification/blink_control";
+    private static final String FILE_BLN_TIMEOUT = "/sys/class/misc/backlightnotification/blink_timeout";
+    private static final String FILE_BLN_INTERVAL = "/sys/class/misc/backlightnotification/blink_interval";
+    private static final String FILE_S2W_TOGGLE = "/sys/android_touch/sweep2wake";
+    private static final String FILE_S2S_TOGGLE = "/sys/android_touch/sweep2sleep";
+    private static final String FILE_S2W_SENSITIVE_TOGGLE = "/sys/android_touch/sweep2wake_sensitive";
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -46,7 +54,12 @@ public class SensorsFragmentActivity extends PreferenceFragment {
 
         addPreferencesFromResource(R.xml.sensors_preferences);
 
-        PreferenceScreen prefSet = getPreferenceScreen();
+        final PreferenceGroup motorsCategory =
+                (PreferenceGroup) findPreference(DisplaySettings.KEY_SENSORS_MOTORS_CATEGORY);
+
+        if (!VibratorIntensity.isSupported()) {
+            getPreferenceScreen().removePreference(motorsCategory);
+        }
 
     }
 
@@ -58,20 +71,29 @@ public class SensorsFragmentActivity extends PreferenceFragment {
 
         Log.w(TAG, "key: " + key);
 
-        if (key.compareTo(DeviceSettings.KEY_USE_GYRO_CALIBRATION) == 0) {
+        if (key.compareTo(DisplaySettings.KEY_USE_GYRO_CALIBRATION) == 0) {
             boxValue = (((CheckBoxPreference)preference).isChecked() ? "1" : "0");
             Utils.writeValue(FILE_USE_GYRO_CALIB, boxValue);
-        } else if (key.compareTo(DeviceSettings.KEY_CALIBRATE_GYRO) == 0) {
+        } else if (key.compareTo(DisplaySettings.KEY_CALIBRATE_GYRO) == 0) {
             // when calibration data utilization is disablen and enabled back,
             // calibration is done at the same time by driver
             Utils.writeValue(FILE_USE_GYRO_CALIB, "0");
             Utils.writeValue(FILE_USE_GYRO_CALIB, "1");
             Utils.showDialog((Context)getActivity(), "Calibration done", "The gyroscope has been successfully calibrated!");
-        } else if (key.compareTo(DeviceSettings.KEY_TOUCHKEY_LIGHT) == 0) {
+        } else if (key.compareTo(DisplaySettings.KEY_TOUCHKEY_LIGHT) == 0) {
             Utils.writeValue(FILE_TOUCHKEY_LIGHT, ((CheckBoxPreference)preference).isChecked() ? "0" : "1");
             Utils.writeValue(FILE_TOUCHKEY_TOGGLE, ((CheckBoxPreference)preference).isChecked() ? "1" : "2");
-        } else if (key.compareTo(DeviceSettings.KEY_TOUCHKEY_BLN) == 0) {
+        } else if (key.compareTo(DisplaySettings.KEY_TOUCHKEY_BLN) == 0) {
             Utils.writeValue(FILE_BLN_TOGGLE, ((CheckBoxPreference)preference).isChecked() ? "1" : "0");
+        } else if (key.compareTo(DisplaySettings.KEY_TOUCHKEY_BLN_OFF) == 0) {
+            Utils.writeValue(FILE_BLN_CONTROL, "0");
+            Utils.showToast((Context)getActivity(), "BLN has been successfully turned off!");
+        } else if (key.compareTo(DisplaySettings.KEY_TOUCHKEY_S2W) == 0) {
+            Utils.writeValue(FILE_S2W_TOGGLE, ((CheckBoxPreference)preference).isChecked() ? "1" : "0");
+        } else if (key.compareTo(DisplaySettings.KEY_TOUCHKEY_S2S) == 0) {
+            Utils.writeValue(FILE_S2S_TOGGLE, ((CheckBoxPreference)preference).isChecked() ? "1" : "0");
+        } else if (key.compareTo(DisplaySettings.KEY_TOUCHKEY_S2W_SENSITIVE) == 0) {
+            Utils.writeValue(FILE_S2W_SENSITIVE_TOGGLE, ((CheckBoxPreference)preference).isChecked() ? "1" : "0");
         }
 
         return true;
@@ -87,11 +109,16 @@ public class SensorsFragmentActivity extends PreferenceFragment {
         // When use gyro calibration value is set to 1, calibration is done at the same time, which
         // means it is reset at each boot, providing wrong calibration most of the time at each reboot.
         // So we only set it to "0" if user wants it, as it defaults to 1 at boot
-        if (!sharedPrefs.getBoolean(DeviceSettings.KEY_USE_GYRO_CALIBRATION, true))
+        if (!sharedPrefs.getBoolean(DisplaySettings.KEY_USE_GYRO_CALIBRATION, true))
             Utils.writeValue(FILE_USE_GYRO_CALIB, "0");
 
-        Utils.writeValue(FILE_TOUCHKEY_LIGHT, sharedPrefs.getBoolean(DeviceSettings.KEY_TOUCHKEY_LIGHT, true) ? "0" : "1");
-        Utils.writeValue(FILE_TOUCHKEY_TOGGLE, sharedPrefs.getBoolean(DeviceSettings.KEY_TOUCHKEY_LIGHT, true) ? "1" : "2");
-        Utils.writeValue(FILE_BLN_TOGGLE, sharedPrefs.getBoolean(DeviceSettings.KEY_TOUCHKEY_BLN, false) ? "1" : "0");
+        Utils.writeValue(FILE_TOUCHKEY_LIGHT, sharedPrefs.getBoolean(DisplaySettings.KEY_TOUCHKEY_LIGHT, true) ? "0" : "1");
+        Utils.writeValue(FILE_TOUCHKEY_TOGGLE, sharedPrefs.getBoolean(DisplaySettings.KEY_TOUCHKEY_LIGHT, true) ? "1" : "2");
+        Utils.writeValue(FILE_BLN_TOGGLE, sharedPrefs.getBoolean(DisplaySettings.KEY_TOUCHKEY_BLN, false) ? "1" : "0");
+        Utils.writeValue(FILE_BLN_INTERVAL, sharedPrefs.getString(DisplaySettings.KEY_TOUCHKEY_BLN_INTERVAL, "500 500"));
+        Utils.writeValue(FILE_BLN_TIMEOUT, sharedPrefs.getString(DisplaySettings.KEY_TOUCHKEY_BLN_TIMEOUT, "600"));
+        Utils.writeValue(FILE_S2W_TOGGLE, sharedPrefs.getBoolean(DisplaySettings.KEY_TOUCHKEY_S2W, false) ? "1" : "0");
+        Utils.writeValue(FILE_S2S_TOGGLE, sharedPrefs.getBoolean(DisplaySettings.KEY_TOUCHKEY_S2S, false) ? "1" : "0");
+        Utils.writeValue(FILE_S2W_SENSITIVE_TOGGLE, sharedPrefs.getBoolean(DisplaySettings.KEY_TOUCHKEY_S2W_SENSITIVE, false) ? "1" : "0");
     }
 }
