@@ -15,7 +15,6 @@
  -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="app_name">Galaxy S II Beállítások</string>
-    <string name="screen_colors_title">Színek</string>
     <string name="touchscreen_subcat_title">Érintőképernyő</string>
     <string name="touchscreen_sensitivity_title_head">Érzékenység</string>
     <string name="touchscreen_sensitivity_summary_head">Állítsd be az érintőképernyő érzékenységét</string>

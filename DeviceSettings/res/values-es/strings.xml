@@ -15,7 +15,6 @@
  -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="app_name">Ajustes avanzados</string>
-    <string name="screen_colors_title">Colores</string>
     <string name="touchscreen_subcat_title">Pantalla Táctil</string>
     <string name="touchscreen_sensitivity_title_head">Sensibilidad táctil</string>
     <string name="touchscreen_sensitivity_summary_head">Establecer la sensibilidad táctil de la pantalla</string>

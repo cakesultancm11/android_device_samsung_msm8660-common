@@ -25,7 +25,7 @@ public class PanelUndervolt extends HWValueSliderPreference {
     private static String UV_VALUE_PATH = "/sys/module/board_msm8x60_celox/parameters/panel_uv";
     private static int UV_MIN_VALUE = 0;
     private static int UV_MAX_VALUE = 500;
-    private static int UV_DEFAULT_VALUE = 500;
+    private static int UV_DEFAULT_VALUE = 0;
     private static int UV_INCREMENT_VALUE = 25;
 
     private static final HardwareInterface HW_INTERFACE = new HardwareInterface() {
