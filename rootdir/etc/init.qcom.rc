@@ -456,8 +456,9 @@ on property:sys.boot_completed=1
     write /sys/devices/system/cpu/cpufreq/uberdemand/sampling_down_factor 2
     write /sys/devices/system/cpu/cpufreq/uberdemand/down_differential 10
     write /sys/devices/system/cpu/cpufreq/uberdemand/sampling_rate 50000
-    write /sys/module/cpu_input_boost/parameters/input_boost_freq 1134000
-    write /sys/module/cpu_input_boost/parameters/input_boost_ms 900
+    write /sys/kernel/cpu_input_boost/boost_freqs "1242000 1026000"
+    write /sys/kernel/cpu_input_boost/up_threshold 60
+    write /sys/kernel/cpu_input_boost/enabled 1
     chown root system /sys/devices/system/cpu/mfreq
     chmod 220 /sys/devices/system/cpu/mfreq
     chown root system /sys/devices/system/cpu/cpu1/online
