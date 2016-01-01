@@ -458,7 +458,7 @@ on property:sys.boot_completed=1
     write /sys/devices/system/cpu/cpufreq/uberdemand/sampling_rate 50000
     write /sys/kernel/cpu_input_boost/boost_freqs "918000 918000"
     write /sys/kernel/cpu_input_boost/up_threshold 60
-    write /sys/kernel/cpu_input_boost/enabled 1
+    write /sys/kernel/cpu_input_boost/enabled 0
     chown root system /sys/devices/system/cpu/mfreq
     chmod 220 /sys/devices/system/cpu/mfreq
     chown root system /sys/devices/system/cpu/cpu1/online
